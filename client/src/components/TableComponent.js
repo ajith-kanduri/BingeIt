@@ -8,6 +8,7 @@ class TableComponent extends React.Component {
   state = {
     searchText: '',
     searchedColumn: '',
+    filteredInfo: null,
   };
 
   getColumnSearchProps = dataIndex => ({
@@ -92,8 +93,15 @@ class TableComponent extends React.Component {
     clearFilters();
     this.setState({ searchText: '' });
   };
-
+  handleChange = (pagination, filters) => {
+    //console.log('Various parameters', pagination, filters, sorter);
+    this.setState({
+      filteredInfo: filters,
+    });
+  };
   render() {
+    let { filteredInfo } = this.state;
+    filteredInfo = filteredInfo || {};
     const columns = [
       {
         title: 'Title',
@@ -106,20 +114,46 @@ class TableComponent extends React.Component {
         title: 'Type',
         dataIndex: 'titleType',
         key: 'titleType',
-
-        ...this.getColumnSearchProps('titleType'),
+        filters: [
+          { text: 'movie', value: 'movie' },
+          { text: 'series', value: 'series' },
+        ],
+        filteredValue: filteredInfo.titleType || null,
+        onFilter: (value, record) => record.titleType.includes(value),
       },
       {
         title: 'Rating',
         dataIndex: 'averageRating',
         key: 'averageRating',
-        ...this.getColumnSearchProps('averageRating'),
+        filters: [
+          { text: '>=9', value: [10, 9] },
+          { text: '8.5-9', value: [9, 8.5] },
+          { text: '8-8.5', value: [8.5, 8] },
+        ],
+        filteredValue: filteredInfo.averageRating || null,
+        onFilter: (value, record) => {
+          if (
+            record.averageRating < value[0] &&
+            record.averageRating >= value[1]
+          ) {
+            return record;
+          }
+        },
       },
       {
         title: 'Genre',
         dataIndex: 'genres',
         key: 'genres',
-        ...this.getColumnSearchProps('genres'),
+        filters: [
+          { text: 'Drama', value: 'Drama' },
+          { text: 'Crime', value: 'Crime' },
+          { text: 'Action', value: 'Action' },
+          { text: 'Thriller', value: 'Thriller' },
+          { text: 'Adventure', value: 'Adventure' },
+          { text: 'Fantasy', value: 'Fantasy' },
+        ],
+        filteredValue: filteredInfo.genres || null,
+        onFilter: (value, record) => record.genres.includes(value),
       },
       {
         title: 'Directors',
@@ -145,6 +179,7 @@ class TableComponent extends React.Component {
         }}
         dataSource={data}
         bordered
+        onChange={this.handleChange}
       />
     );
   }
