@@ -4,7 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 
 
-class TableComponent extends React.Component {
+class FavouriteComponent extends React.Component {
   state = {
     searchText: '',
     searchedColumn: '',
@@ -165,7 +165,7 @@ class TableComponent extends React.Component {
         title: 'Favourite',
         dataIndex: 'isFavourite',
         key: 'isFavourite',
-        render: (text,record,index) => (<a onClick={()=>this.props.toggleFavourite(record.id)}>{record.isFavourite?"Remove":"Add"}</a>),
+        render: (text,record,index) => (<a onClick={()=>this.props.toggleFavourite(index)}>{record.isFavourite?"Add":"Remove"}</a>),
       },
     ];
     return (
@@ -185,4 +185,4 @@ class TableComponent extends React.Component {
   }
 }
 
-export default TableComponent;
+export default FavouriteComponent;
