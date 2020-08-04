@@ -3,13 +3,13 @@
   text-align: center;
 }
 
-.header{
+.header {
   color: white;
   font-size: 30px;
-  text-align: left;
+  text-align: center;
 }
 
-.content{
+.content {
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 10px;

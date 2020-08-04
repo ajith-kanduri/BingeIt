@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Input, Button, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-
+import ExpandedRowRender from './ExpandedRowRender';
 
 class TableComponent extends React.Component {
   state = {
@@ -165,7 +165,11 @@ class TableComponent extends React.Component {
         title: 'Favourite',
         dataIndex: 'isFavourite',
         key: 'isFavourite',
-        render: (text,record,index) => (<a onClick={()=>this.props.toggleFavourite(record.id)}>{record.isFavourite?"Remove":"Add"}</a>),
+        render: (text, record, index) => (
+          <a onClick={() => this.props.toggleFavourite(record.id)}>
+            {record.isFavourite ? 'Remove' : 'Add'}
+          </a>
+        ),
       },
     ];
     return (
@@ -173,7 +177,9 @@ class TableComponent extends React.Component {
         columns={columns}
         expandable={{
           expandedRowRender: record => (
-            <p style={{ margin: 0 }}>{record.description}</p>
+            <div>
+              <ExpandedRowRender />
+            </div>
           ),
           rowExpandable: record => record.titleType !== 'movie',
         }}
