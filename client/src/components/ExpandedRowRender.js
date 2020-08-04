@@ -1,29 +1,57 @@
 import React from 'react';
-import { Table, Input, Button, Space } from 'antd';
+import { Table } from 'antd';
 
 class ExpandedRowRender extends React.Component {
+  state = {
+    filteredInfo: null,
+  };
+  handleChange = filters => {
+    //console.log('Various parameters', pagination, filters, sorter);
+    this.setState({
+      filteredInfo: filters,
+    });
+  };
   render() {
-    const columns = [
-      { title: 'Date', dataIndex: 'date', key: 'date' },
-      { title: 'Name', dataIndex: 'name', key: 'name' },
-
-      { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-      {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-      },
-    ];
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        date: '2014-12-24 23:12:00',
-        name: 'This is production name',
-        upgradeNum: 'Upgraded: 56',
+    let { filteredInfo } = this.state;
+    filteredInfo = filteredInfo || {};
+    const data = this.props.episodeList;
+    var uniqueSeasons = [...new Set(data.map(({ season }) => season))];
+    console.log(uniqueSeasons);
+    var filter = [];
+    for (let i = 0; i < uniqueSeasons.length; i++) {
+      filter.push({
+        text: uniqueSeasons[i],
+        value: uniqueSeasons[i],
       });
     }
-    return <Table columns={columns} dataSource={data} pagination={false} />;
+    const columns = [
+      {
+        title: 'Season',
+        dataIndex: 'season',
+        key: 'season',
+        filters: filter,
+        filteredValue: filteredInfo.season || null,
+        onFilter: (value, record) => record.season === value,
+      },
+      { title: 'Episode', dataIndex: 'epsiode', key: 'epsiode' },
+      { title: 'Name', dataIndex: 'title', key: 'title' },
+      {
+        title: 'Runtime(mins)',
+        dataIndex: 'runtimeMinutes',
+        key: 'runtimeMinutes',
+      },
+      { title: 'Year', dataIndex: 'year', key: 'year' },
+      { title: 'Rating', dataIndex: 'averageRating', key: 'averageRating' },
+    ];
+    return (
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        bordered
+        onChange={this.handleChange}
+      />
+    );
   }
 }
 export default ExpandedRowRender;

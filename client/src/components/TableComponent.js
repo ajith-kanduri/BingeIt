@@ -116,7 +116,7 @@ class TableComponent extends React.Component {
         key: 'titleType',
         filters: [
           { text: 'movie', value: 'movie' },
-          { text: 'series', value: 'series' },
+          { text: 'series', value: 'tvSeries' },
         ],
         filteredValue: filteredInfo.titleType || null,
         onFilter: (value, record) => record.titleType.includes(value),
@@ -178,7 +178,7 @@ class TableComponent extends React.Component {
         expandable={{
           expandedRowRender: record => (
             <div>
-              <ExpandedRowRender />
+              <ExpandedRowRender episodeList={record.episodeList} />
             </div>
           ),
           rowExpandable: record => record.titleType !== 'movie',
