@@ -18,3 +18,16 @@
   padding-right: 15px;
   padding-bottom: 10px;
 }
+
+.season{
+  display:flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.seasonDropdown{
+  top:50%;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  font-size: 15px;
+}

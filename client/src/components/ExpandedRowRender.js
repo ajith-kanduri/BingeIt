@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
+import "../App.css"
 
 class ExpandedRowRender extends React.Component {
   constructor() {
@@ -59,9 +60,9 @@ class ExpandedRowRender extends React.Component {
     ];
     return (
       <div>
-        <div className='rowC'>
-          <h4>Season : </h4>
-          <select onChange={this.handleSeasonChange}>
+        <div className='season'>
+          <h4 className="seasonDrop">Season : </h4>
+          <select className="seasonDropdown" onChange={this.handleSeasonChange}>
             {uniqueSeasons.map(function (data, key) {
               return (
                 <option key={key} value={data}>
