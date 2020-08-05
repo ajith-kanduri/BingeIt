@@ -22,12 +22,18 @@ class ExpandedRowRender extends React.Component {
     var epsList = this.props.episodeList.slice();
     console.log(epsList);
     console.log(e.target.value);
+    const s = e.target.value;
+    var list = [];
+    for (let i = 0; i < epsList.length; i++) {
+      if (epsList[i].season == s) {
+        list.push(epsList[i]);
+      }
+    }
     this.setState({
       season: e.target.value,
-      data: epsList.filter(function (epsList) {
-        return epsList.season === e.target.value;
-      }),
+      data: list,
     });
+    console.log(list);
     console.log(this.state.data);
   };
   render() {
@@ -53,15 +59,18 @@ class ExpandedRowRender extends React.Component {
     ];
     return (
       <div>
-        <select onChange={this.handleSeasonChange}>
-          {uniqueSeasons.map(function (data, key) {
-            return (
-              <option key={key} value={data}>
-                {data}
-              </option>
-            );
-          })}
-        </select>
+        <div className='rowC'>
+          <h4>Season : </h4>
+          <select onChange={this.handleSeasonChange}>
+            {uniqueSeasons.map(function (data, key) {
+              return (
+                <option key={key} value={data}>
+                  {data}
+                </option>
+              );
+            })}
+          </select>
+        </div>
         <br></br>
         <br></br>
         <h1>Season {this.state.season}</h1>
