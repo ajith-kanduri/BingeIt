@@ -1,0 +1,56 @@
+@import '~antd/dist/antd.css';
+
+.app {
+  height: 100vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.header{
+  background-color:turquoise;
+}
+
+.content{
+  margin-top:10px;
+  margin-left:20px;
+}
+
+.logo{
+  height:fit-content;
+  width: fit-content;
+  margin-bottom: 50px;
+}
+
+.login{
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+}
+
+.footer{
+  position: sticky;
+  bottom: 0;
+  max-height: calc(100vh - 55px);
+}
+
+.LoginRegister-button{
+  display: flex;
+  margin-top: 20px;
+}
+
+.login-form-button{
+  margin-right:10px;
+}
+
+.register-form-button{
+  margin-left: 10px;
+}
+
