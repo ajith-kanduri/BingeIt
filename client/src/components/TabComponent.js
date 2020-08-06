@@ -12,42 +12,95 @@ class TabComponent extends React.Component {
   constructor(props) {
     super(props);
     let data;
-    if (localStorage.getItem('data') != null) {
-      data = JSON.parse(localStorage.getItem('data'));
-    } else {
-      data = require('../data.json');
-    }
     this.state = {
-      dataSource: data,
+      dataSource: [],
+      favMovies: [],
     };
   }
-
-  toggleFavourite(key) {
-    let newDataSource = this.state.dataSource.slice();
-    newDataSource[key - 1]['isFavourite'] = newDataSource[key - 1][
-      'isFavourite'
-    ]
-      ? 0
-      : 1;
-    localStorage.setItem('data', JSON.stringify(newDataSource));
-    this.setState({ dataSource: newDataSource });
+  componentDidMount() {
+    this.userAction();
+    this.fetchfavorites();
   }
 
+  toggleFavourite(key, tconst) {
+    let newDataSource = this.state.dataSource.slice();
+    // newDataSource[key - 1]['isFavourite'] = newDataSource[key - 1][
+    //   'isFavourite'
+    // ]
+    //   ? 0
+    //   : 1;
+
+    const addToFavs = async () => {
+      const response = await fetch(
+        'http://c227cbb6beba.ngrok.io/fav/addfavourites?email=ajit&tconst=' +
+          tconst,
+        {
+          method: 'POST', // string or object
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const myJson = await response.json(); //extract JSON from the http response
+      // do something with myJson
+      console.log(myJson);
+    };
+    addToFavs();
+
+    // const deleteFromFavs = async () => {
+    //   const response = await fetch(
+    //     'http://c227cbb6beba.ngrok.io/fav/deletefavourites?email=ajit&tconst=' +
+    //       tconst,
+    //     {
+    //       method: 'POST', // string or object
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
+    //   );
+    //   const myJson = await response.json(); //extract JSON from the http response
+    //   // do something with myJson
+    //   console.log(myJson);
+    // };
+    // deleteFromFavs();
+
+    this.fetchfavorites();
+  }
+  fetchfavorites = async () => {
+    const response = await fetch(
+      'http://c227cbb6beba.ngrok.io/fav/listfavourites?email=ajit',
+      {
+        method: 'POST', // string or object
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const myJson = await response.json(); //extract JSON from the http response
+    // do something with myJson
+    console.log(myJson);
+    this.setState({ favMovies: myJson.que });
+  };
+  userAction = async () => {
+    const response = await fetch('http://c227cbb6beba.ngrok.io/titles');
+    const myJson = await response.json(); //extract JSON from the http response
+    // do something with myJson
+    console.log(myJson.results);
+    this.setState({ dataSource: myJson.results });
+  };
   render() {
     return (
       <Tabs defaultActiveKey='1' onChange={callback}>
         <TabPane tab='All Movies' key='1'>
           <TableComponent
             dataSource={this.state.dataSource}
-            toggleFavourite={key => this.toggleFavourite(key)}
+            toggleFavourite={(key, tconst) => this.toggleFavourite(key, tconst)}
           />
         </TabPane>
         <TabPane tab='Favourites' key='2'>
           <TableComponent
-            dataSource={this.state.dataSource.filter(function (val) {
-              return val.isFavourite == 1;
-            })}
-            toggleFavourite={key => this.toggleFavourite(key)}
+            dataSource={this.state.favMovies}
+            toggleFavourite={(key, tconst) => this.toggleFavourite(key, tconst)}
           />
         </TabPane>
       </Tabs>
