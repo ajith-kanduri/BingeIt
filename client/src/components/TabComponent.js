@@ -11,59 +11,59 @@ function callback(key) {
 class TabComponent extends React.Component {
   constructor(props) {
     super(props);
-    let data;
     this.state = {
       dataSource: [],
       favMovies: [],
+      favIds: [],
     };
   }
   componentDidMount() {
-    this.userAction();
+    this.fetchMovies();
     this.fetchfavorites();
   }
 
-  toggleFavourite(key, tconst) {
-    let newDataSource = this.state.dataSource.slice();
-    // newDataSource[key - 1]['isFavourite'] = newDataSource[key - 1][
-    //   'isFavourite'
-    // ]
-    //   ? 0
-    //   : 1;
-
-    const addToFavs = async () => {
-      const response = await fetch(
-        'http://c227cbb6beba.ngrok.io/fav/addfavourites?email=ajit&tconst=' +
-          tconst,
-        {
-          method: 'POST', // string or object
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      const myJson = await response.json(); //extract JSON from the http response
-      // do something with myJson
-      console.log(myJson);
-    };
-    addToFavs();
-
-    // const deleteFromFavs = async () => {
-    //   const response = await fetch(
-    //     'http://c227cbb6beba.ngrok.io/fav/deletefavourites?email=ajit&tconst=' +
-    //       tconst,
-    //     {
-    //       method: 'POST', // string or object
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //     }
-    //   );
-    //   const myJson = await response.json(); //extract JSON from the http response
-    //   // do something with myJson
-    //   console.log(myJson);
-    // };
-    // deleteFromFavs();
-
+  toggleFavourite(tconst) {
+    let flag = 0;
+    for (let i = 0; i < this.state.favMovies.length; i++) {
+      if (this.state.favMovies[i].tconst === tconst) {
+        flag = 1;
+      }
+    }
+    if (flag === 0) {
+      const addToFavs = async () => {
+        const response = await fetch(
+          'http://c227cbb6beba.ngrok.io/fav/addfavourites?email=ajit&tconst=' +
+            tconst,
+          {
+            method: 'POST', // string or object
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        const myJson = await response.json(); //extract JSON from the http response
+        // do something with myJson
+        console.log(myJson);
+      };
+      addToFavs();
+    } else {
+      const deleteFromFavs = async () => {
+        const response = await fetch(
+          'http://c227cbb6beba.ngrok.io/fav/deletefavourites?email=ajit&tconst=' +
+            tconst,
+          {
+            method: 'POST', // string or object
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        const myJson = await response.json(); //extract JSON from the http response
+        // do something with myJson
+        console.log(myJson);
+      };
+      deleteFromFavs();
+    }
     this.fetchfavorites();
   }
   fetchfavorites = async () => {
@@ -79,14 +79,18 @@ class TabComponent extends React.Component {
     const myJson = await response.json(); //extract JSON from the http response
     // do something with myJson
     console.log(myJson);
-    this.setState({ favMovies: myJson.que });
+    let ids = [];
+    for (let i = 0; i < myJson.que.length; i++) {
+      ids.push(myJson.que[i].tconst);
+    }
+    this.setState({ favMovies: myJson.que, favIds: ids });
   };
-  userAction = async () => {
+  fetchMovies = async () => {
     const response = await fetch('http://c227cbb6beba.ngrok.io/titles');
     const myJson = await response.json(); //extract JSON from the http response
     // do something with myJson
     console.log(myJson.results);
-    this.setState({ dataSource: myJson.results });
+    this.setState({ dataSource: myJson.results, favIds: [] });
   };
   render() {
     return (
@@ -94,13 +98,15 @@ class TabComponent extends React.Component {
         <TabPane tab='All Movies' key='1'>
           <TableComponent
             dataSource={this.state.dataSource}
-            toggleFavourite={(key, tconst) => this.toggleFavourite(key, tconst)}
+            toggleFavourite={tconst => this.toggleFavourite(tconst)}
+            favIds={this.state.favIds}
           />
         </TabPane>
         <TabPane tab='Favourites' key='2'>
           <TableComponent
             dataSource={this.state.favMovies}
-            toggleFavourite={(key, tconst) => this.toggleFavourite(key, tconst)}
+            toggleFavourite={tconst => this.toggleFavourite(tconst)}
+            favIds={this.state.favIds}
           />
         </TabPane>
       </Tabs>

@@ -165,10 +165,8 @@ class TableComponent extends React.Component {
         dataIndex: 'isFavourite',
         key: 'isFavourite',
         render: (text, record, index) => (
-          <a
-            onClick={() => this.props.toggleFavourite(record.id, record.tconst)}
-          >
-            {record.isFavourite ? 'Remove' : 'Add'}
+          <a onClick={() => this.props.toggleFavourite(record.tconst)}>
+            {this.props.favIds.includes(record.tconst) ? 'Remove' : 'Add'}
           </a>
         ),
       },
