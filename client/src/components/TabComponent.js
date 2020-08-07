@@ -15,6 +15,7 @@ class TabComponent extends React.Component {
       dataSource: [],
       favMovies: [],
       favIds: [],
+      loading: 'false',
     };
   }
   componentDidMount() {
@@ -31,8 +32,9 @@ class TabComponent extends React.Component {
     }
     if (flag === 0) {
       const addToFavs = async () => {
+        this.setState({ loading: 'true' });
         const response = await fetch(
-          'http://c227cbb6beba.ngrok.io/fav/addfavourites?email=ajit&tconst=' +
+          'http://74d47a6c12e2.ngrok.io/fav/addfavourites?email=ajit&tconst=' +
             tconst,
           {
             method: 'POST', // string or object
@@ -44,12 +46,15 @@ class TabComponent extends React.Component {
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
         console.log(myJson);
+        this.setState({ loading: 'false' });
+        this.fetchfavorites();
       };
       addToFavs();
     } else {
       const deleteFromFavs = async () => {
+        this.setState({ loading: 'true' });
         const response = await fetch(
-          'http://c227cbb6beba.ngrok.io/fav/deletefavourites?email=ajit&tconst=' +
+          'http://74d47a6c12e2.ngrok.io/fav/deletefavourites?email=ajit&tconst=' +
             tconst,
           {
             method: 'POST', // string or object
@@ -61,14 +66,16 @@ class TabComponent extends React.Component {
         const myJson = await response.json(); //extract JSON from the http response
         // do something with myJson
         console.log(myJson);
+        this.setState({ loading: 'false' });
+        this.fetchfavorites();
       };
       deleteFromFavs();
     }
-    this.fetchfavorites();
   }
   fetchfavorites = async () => {
+    this.setState({ loading: 'true' });
     const response = await fetch(
-      'http://c227cbb6beba.ngrok.io/fav/listfavourites?email=ajit',
+      'http://74d47a6c12e2.ngrok.io/fav/listfavourites?email=ajit',
       {
         method: 'POST', // string or object
         headers: {
@@ -83,34 +90,38 @@ class TabComponent extends React.Component {
     for (let i = 0; i < myJson.que.length; i++) {
       ids.push(myJson.que[i].tconst);
     }
-    this.setState({ favMovies: myJson.que, favIds: ids });
+    this.setState({ favMovies: myJson.que, favIds: ids, loading: 'false' });
   };
   fetchMovies = async () => {
-    const response = await fetch('http://c227cbb6beba.ngrok.io/titles');
+    const response = await fetch('http://74d47a6c12e2.ngrok.io/titles');
     const myJson = await response.json(); //extract JSON from the http response
     // do something with myJson
     console.log(myJson.results);
-    this.setState({ dataSource: myJson.results, favIds: [] });
+    this.setState({ dataSource: myJson.results, loading: 'false' });
   };
   render() {
-    return (
-      <Tabs defaultActiveKey='1' onChange={callback}>
-        <TabPane tab='All Movies' key='1'>
-          <TableComponent
-            dataSource={this.state.dataSource}
-            toggleFavourite={tconst => this.toggleFavourite(tconst)}
-            favIds={this.state.favIds}
-          />
-        </TabPane>
-        <TabPane tab='Favourites' key='2'>
-          <TableComponent
-            dataSource={this.state.favMovies}
-            toggleFavourite={tconst => this.toggleFavourite(tconst)}
-            favIds={this.state.favIds}
-          />
-        </TabPane>
-      </Tabs>
-    );
+    if (this.state.loading === 'true') {
+      return <h1>Loading...</h1>;
+    } else {
+      return (
+        <Tabs defaultActiveKey='1' onChange={callback}>
+          <TabPane tab='All Movies' key='1'>
+            <TableComponent
+              dataSource={this.state.dataSource}
+              toggleFavourite={tconst => this.toggleFavourite(tconst)}
+              favIds={this.state.favIds}
+            />
+          </TabPane>
+          <TabPane tab='Favourites' key='2'>
+            <TableComponent
+              dataSource={this.state.favMovies}
+              toggleFavourite={tconst => this.toggleFavourite(tconst)}
+              favIds={this.state.favIds}
+            />
+          </TabPane>
+        </Tabs>
+      );
+    }
   }
 }
 
