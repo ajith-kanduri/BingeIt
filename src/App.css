@@ -35,11 +35,6 @@
   flex-direction: column;
 }
 
-.footer{
-  position: sticky;
-  bottom: 0;
-  max-height: calc(100vh - 55px);
-}
 
 .LoginRegister-button{
   display: flex;

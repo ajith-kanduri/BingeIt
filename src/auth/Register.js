@@ -111,7 +111,7 @@ const Register = () => {
         </Form.Item>
         <Form.Item>
           <p>Already Have an Account? </p>
-          <a className='login-form-forgot' href=''>
+          <a className='login-form-forgot' onClick={()=>history.push('/')}>
             Login
           </a>
         </Form.Item>

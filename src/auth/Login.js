@@ -14,9 +14,6 @@ const Login = () => {
 
 
   const history = useHistory();
-
-  const onRegister = () =>
-    history.push('/register');
   
 
   console.log('----');
@@ -85,7 +82,7 @@ const Login = () => {
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
-         <a onClick={()=>this.onRegister()} className="register-form-button">Register Now</a>
+         <a onClick={()=>history.push('/register')} className="register-form-button">Register Now</a>
       </Form.Item>
     </Form>
     </div>
