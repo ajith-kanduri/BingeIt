@@ -5,7 +5,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import ExpandedRowRender from './ExpandedRowRender';
 
 
-const API_ADDR = 'http://74d47a6c12e2.ngrok.io' 
+const API_ADDR = 'http://1d8c951668ad.ngrok.io' 
 
 class TableComponent extends React.Component {
   state = {

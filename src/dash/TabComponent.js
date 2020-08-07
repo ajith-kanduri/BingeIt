@@ -1,9 +1,10 @@
 import React from 'react';
 import { Tabs } from 'antd';
 import TableComponent from './TableComponent';
+import { useHistory,withRouter } from 'react-router';
 
 
-const API_ADDR = 'http://74d47a6c12e2.ngrok.io' 
+const API_ADDR = 'http://1d8c951668ad.ngrok.io' 
 
 const { TabPane } = Tabs;
 
@@ -12,15 +13,26 @@ function callback(key) {
 }
 
 class TabComponent extends React.Component {
+  
   constructor(props) {
     super(props);
+    let email;
+    if(!props.location?.state?.email){
+      props.history.push('/');
+      email = null;
+    }
+    else{
+      email=props.location.state.email;
+    }
+
     this.state = {
       dataSource: [],
       favMovies: [],
       favIds: [],
-      email: props.location.state.email,
+      email: email,
     };
   }
+
   componentDidMount() {
     this.fetchBoth();
 
@@ -146,4 +158,4 @@ class TabComponent extends React.Component {
   }
 }
 
-export default TabComponent;
+export default withRouter(TabComponent);
